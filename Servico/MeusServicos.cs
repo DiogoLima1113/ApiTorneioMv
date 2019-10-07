@@ -29,6 +29,11 @@ namespace api_torneio_mv.Servico
         {
             var listaRelacionamentos = _repositorioRelacionamento.ObterTodos().Where( e => e.IdTime == time.Id ).ToList();
 
+            if (listaRelacionamentos == null)
+            {
+                yield break;
+            }
+
             foreach (var relacionamento in listaRelacionamentos)
             {
                 yield return _repositorioJogador.Obter(relacionamento.IdJogador);
@@ -39,7 +44,8 @@ namespace api_torneio_mv.Servico
         {
             var relacionamento = _repositorioRelacionamento.ObterTodos().Where( e => e.IdJogador == jogador.Id ).ToList().FirstOrDefault();
 
-            return _repositorioTime.Obter(relacionamento.IdTime);
+
+            return relacionamento == null ? null : _repositorioTime.Obter(relacionamento.IdTime);
         }
     }
 }

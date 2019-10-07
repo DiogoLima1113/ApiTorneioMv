@@ -11,72 +11,72 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class JogadoresController : ControllerBase
+    public class TimesController : ControllerBase
     {
         private readonly IConfiguration _configuration;
-        private readonly IDbRepositorio<Jogador> _dbRepositorioJogador;
+        private readonly IDbRepositorio<Time> _dbRepositorioTime;
         private readonly IMeusServicos _servicos;
 
-        public JogadoresController(IConfiguration configuration, IDbRepositorio<Jogador> dbRepositorioJogador,
+        public TimesController(IConfiguration configuration, IDbRepositorio<Time> dbRepositorioTime,
             IMeusServicos servicos)
         {
             _configuration = configuration;
-            _dbRepositorioJogador = dbRepositorioJogador;
+            _dbRepositorioTime = dbRepositorioTime;
             _servicos = servicos;
         }
 
         [HttpGet]
-        public ActionResult<IEnumerable<Jogador>> Get()
+        public ActionResult<IEnumerable<Time>> Get()
         {
-            return _dbRepositorioJogador.ObterTodos().ToList();
+            return _dbRepositorioTime.ObterTodos().ToList();
         }
 
         [HttpGet("{id}")]
         public ActionResult<object> Get(int id)
         {
-            Jogador jogador = _dbRepositorioJogador.Obter(id);
+            Time time = _dbRepositorioTime.Obter(id);
 
-            if (jogador == null)
+            if (time == null)
             {
                 return NotFound();
             }
             
-            var time = _servicos.ObterTimeDoJogador(jogador);
-            if (time != null)
+            var jogadores = _servicos.ObterJogadoresDoTime(time);
+            if (jogadores.Any())
             {
-                var jogadorCompleto = new { Id = jogador.Id, Nome = jogador.Nome, 
-                                            IdTime = time.Id, NomeTime = time.Nome };
+                var timeCompleto = new { Id = time.Id, Nome = time.Nome, 
+                                            ListaJogadores = jogadores };
 
-                return jogadorCompleto;
+                return timeCompleto;
             }
 
-            return jogador;
+            return time;
         }
 
         [HttpPost]
-        public ActionResult<Jogador> Post(Jogador jogador)
+        public ActionResult<Time> Post(Time time)
         {
-            _dbRepositorioJogador.Inserir(jogador);
-            Jogador novoJogador = _dbRepositorioJogador.ObterTodos().Last();
+            _dbRepositorioTime.Inserir(time);
+            Time novoTime = _dbRepositorioTime.ObterTodos().Last();
 
-            return CreatedAtAction(nameof(Get), new { id = novoJogador.Id }, novoJogador);
+            return CreatedAtAction(nameof(Get), new { id = novoTime.Id }, novoTime);
         }
 
         [HttpPut("{id}")]
-        public IActionResult Put(int id, Jogador jogador)
+        public IActionResult Put(int id, Time time)
         {
-            if (id != jogador.Id)
+            if (id != time.Id)
             {
                 return BadRequest();
             }
 
             try
             {
-                _dbRepositorioJogador.Atualizar(jogador);
+                _dbRepositorioTime.Atualizar(time);
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (_dbRepositorioJogador.Obter(id) == null)
+                if (_dbRepositorioTime.Obter(id) == null)
                 {
                     return NotFound();
                 }
@@ -93,12 +93,12 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
         [HttpDelete("{id}")]
         public IActionResult Delete(int id)
         {
-            if (_dbRepositorioJogador.Obter(id) == null)
+            if (_dbRepositorioTime.Obter(id) == null)
             {
                 return NotFound();
             }
 
-            _dbRepositorioJogador.Deletar(id);
+            _dbRepositorioTime.Deletar(id);
 
             return NoContent();
         }
