@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace api_torneio_mv.Dominio.Entidade
 {
     public class Time
@@ -6,5 +8,6 @@ namespace api_torneio_mv.Dominio.Entidade
         
         public int Id {get; set;}
         public string Nome {get; set;}
+        public IEnumerable<Jogador> ListaJogadores {get; set;}
     }
 }

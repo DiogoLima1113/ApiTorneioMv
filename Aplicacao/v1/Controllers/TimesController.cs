@@ -15,10 +15,10 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IDbRepositorio<Time> _dbRepositorioTime;
-        private readonly IMeusServicos _servicos;
+        private readonly IServicosTorneio _servicos;
 
         public TimesController(IConfiguration configuration, IDbRepositorio<Time> dbRepositorioTime,
-            IMeusServicos servicos)
+            IServicosTorneio servicos)
         {
             _configuration = configuration;
             _dbRepositorioTime = dbRepositorioTime;
@@ -32,7 +32,7 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult<object> Get(int id)
+        public ActionResult<Time> Get(int id)
         {
             Time time = _dbRepositorioTime.Obter(id);
 
@@ -41,16 +41,7 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
                 return NotFound();
             }
             
-            var jogadores = _servicos.ObterJogadoresDoTime(time);
-            if (jogadores.Any())
-            {
-                var timeCompleto = new { Id = time.Id, Nome = time.Nome, 
-                                            ListaJogadores = jogadores };
-
-                return timeCompleto;
-            }
-
-            return time;
+            return _servicos.GerarTimeComJogadores(time);
         }
 
         [HttpPost]
@@ -73,6 +64,7 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
             try
             {
                 _dbRepositorioTime.Atualizar(time);
+                _servicos.AtualizaJogadoresTime(time);
             }
             catch (DbUpdateConcurrencyException)
             {

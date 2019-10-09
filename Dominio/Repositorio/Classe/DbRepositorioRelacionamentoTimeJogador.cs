@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
 using api_torneio_mv.Dominio.Entidade;
 using api_torneio_mv.Dominio.Repositorio.Interface;
@@ -7,7 +6,7 @@ using Dapper;
 
 namespace api_torneio_mv.Dominio.Repositorio.Classe
 {
-    public class DbRepositorioRelacionamentoTimeJogador : IDbRepositorio<RelacionamentoTimeJogador>
+    public class DbRepositorioRelacionamentoTimeJogador : IDbRepositorioRelacionamentoTimeJogador
     {
         private IConnectionProvider _connectionProvider;
         const string SelectField = "id, idTime, idJogador";
@@ -18,56 +17,62 @@ namespace api_torneio_mv.Dominio.Repositorio.Classe
             _connectionProvider = connectionProvider;
         }
         
-        public void Atualizar(RelacionamentoTimeJogador obj)
+        public void Atualizar(Time time, Jogador jogador)
         {
             using(var connection = _connectionProvider.CriarConexao())
             {
                 connection.Query($@"UPDATE {NomeTabela}
-                                SET idTime = @IdTime, idJogador = @IdJogador
-                                WHERE id = @Id;",
-                                new { Id = obj.Id,
-                                    IdTime = obj.IdTime,
-                                    IdJogador = obj.IdJogador });
+                                SET idTime = @IdTime
+                                WHERE idJogador = @IdJogador;",
+                                new { IdTime = time.Id,
+                                    IdJogador = jogador.Id });
             }
         }
 
-        public void Deletar(int id)
+        public IEnumerable<Jogador> ObterJogadoresTime(Time time)
         {
             using(var connection = _connectionProvider.CriarConexao())
             {
-                connection.Query($@"DELETE FROM {NomeTabela}
-                                WHERE id = @Id;",
-                                new { Id = id });
+                return connection.Query<Jogador>($@"SELECT j.id, j.nome
+                                                FROM {NomeTabela} as r
+                                                JOIN Jogador as j
+                                                ON (j.id = r.idJogador)
+                                                WHERE r.idTime = @IdTime;",
+                                                new { IdTime = time.Id });
             }
         }
 
-        public void Inserir(RelacionamentoTimeJogador obj)
+        public void Remover(Time time)
+        {
+            using(var connection = _connectionProvider.CriarConexao())
+            {
+                connection.Query($@"UPDATE {NomeTabela}
+                                SET idJogador = null
+                                WHERE idTime = @IdTime;",
+                                new { IdTime = time.Id });
+            }
+        }
+
+        public void Inserir(int idTime, int idJogador)
         {
             using(var connection = _connectionProvider.CriarConexao())
             {
                 connection.Query($@"INSERT INTO {NomeTabela} VALUES
                                 (@IdTime, @IdJogador);",
-                                new { IdTime = obj.IdTime, IdJogador = obj.IdJogador });
+                                new { IdTime = idTime, IdJogador = idJogador });
             }
         }
 
-        public RelacionamentoTimeJogador Obter(int id)
+        public Time ObterTimeDoJogador(int idJogador)
         {
             using(var connection = _connectionProvider.CriarConexao())
             {
-                return connection.Query<RelacionamentoTimeJogador>($@"SELECT {SelectField}
-                                                                FROM {NomeTabela}
-                                                                WHERE id = @Id",
-                                                                new {Id = id}).FirstOrDefault();
-            }
-        }
-
-        public IEnumerable<RelacionamentoTimeJogador> ObterTodos()
-        {
-            using(var connection = _connectionProvider.CriarConexao())
-            {
-                return connection.Query<RelacionamentoTimeJogador>($@"SELECT {SelectField}
-                                                                FROM {NomeTabela}");
+                return connection.Query<Time>($@"SELECT t.id, t.nome
+                                                FROM {NomeTabela} r
+                                                JOIN Time t
+                                                ON (t.id = r.idTime)
+                                                WHERE r.idJogador = @IdJogador",
+                                                new {IdJogador = idJogador}).FirstOrDefault();
             }
         }
     }

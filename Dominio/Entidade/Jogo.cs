@@ -9,5 +9,7 @@ namespace api_torneio_mv.Dominio.Entidade
         public int IdTimeVisitante {get; set;}
         public int PontuacaoTimeCasa {get; set;}
         public int PontuacaoTimeVisitante {get; set;}
+        public Time TimeCasa {get; set;}
+        public Time TimeVisitante {get; set;}
     }
 }

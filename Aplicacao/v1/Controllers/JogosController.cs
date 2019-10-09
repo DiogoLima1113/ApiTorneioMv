@@ -17,11 +17,11 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
         private readonly IDbRepositorio<Jogo> _dbRepositorioJogo;
         private readonly IDbRepositorio<Time> _dbRepositorioTime;
         private readonly IDbRepositorio<Jogador> _dbRepositorioJogador;
-        private readonly IMeusServicos _servicos;
+        private readonly IServicosTorneio _servicos;
 
         public JogosController(IConfiguration configuration, IDbRepositorio<Jogo> dbRepositorioJogo,
             IDbRepositorio<Time> dbRepositorioTime, IDbRepositorio<Jogador> dbRepositorioJogador,
-            IMeusServicos servicos)
+            IServicosTorneio servicos)
         {
             _configuration = configuration;
             _dbRepositorioJogo = dbRepositorioJogo;
@@ -33,7 +33,15 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
         [HttpGet]
         public ActionResult<IEnumerable<Jogo>> Get()
         {
-            return _dbRepositorioJogo.ObterTodos().ToList();
+            List<Jogo> jogos = _dbRepositorioJogo.ObterTodos().ToList();
+
+            List<Jogo> jogosComTime = new List<Jogo>();
+            foreach (var jogo in jogos)
+            {
+                jogosComTime.Add(_servicos.GerarJogoComTimes(jogo));
+            }
+
+            return jogosComTime;
         }
 
         [HttpGet("{id}")]
@@ -46,12 +54,7 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
                 return NotFound();
             }
             
-            Time timeCasa = _dbRepositorioTime.Obter(jogo.IdTimeCasa);
-            Time timeVisitante = _dbRepositorioTime.Obter(jogo.IdTimeVisitante);
-            
-            return new { Id = jogo.Id, TimeCasa = timeCasa, TimeVisitante = timeVisitante,
-                                    PontuacaoTimeCasa = jogo.PontuacaoTimeCasa,
-                                    PontuacaoTimeVisitante = jogo.PontuacaoTimeVisitante};
+            return _servicos.GerarJogoComTimes(jogo);
         }
 
         [HttpPost]
@@ -59,7 +62,8 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
         {
             Time timeCasa = _dbRepositorioTime.Obter(jogo.IdTimeCasa);
             Time timeVisitante = _dbRepositorioTime.Obter(jogo.IdTimeVisitante);
-            if (!(_servicos.TimeValido(timeCasa) && _servicos.TimeValido(timeVisitante)))
+
+            if (!_servicos.JogoValido(jogo))
             {
                 return UnprocessableEntity();
             }

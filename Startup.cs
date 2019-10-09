@@ -38,9 +38,9 @@ namespace api_torneio_mv
             services.AddScoped<IConnectionProvider, ConnectionProvider>(spConnectionProvider);
             services.AddScoped<IDbRepositorio<Jogo>, DbRepositorioJogo>();
             services.AddScoped<IDbRepositorio<Jogador>, DbRepositorioJogador>();
-            services.AddScoped<IDbRepositorio<RelacionamentoTimeJogador>, DbRepositorioRelacionamentoTimeJogador>();
             services.AddScoped<IDbRepositorio<Time>, DbRepositorioTime>();
-            services.AddScoped<IMeusServicos, MeusServicos>();
+            services.AddScoped<IServicosTorneio, ServicosTorneio>();
+            services.AddScoped<IDbRepositorioRelacionamentoTimeJogador, DbRepositorioRelacionamentoTimeJogador>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

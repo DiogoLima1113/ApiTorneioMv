@@ -15,10 +15,10 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
     {
         private readonly IConfiguration _configuration;
         private readonly IDbRepositorio<Jogador> _dbRepositorioJogador;
-        private readonly IMeusServicos _servicos;
+        private readonly IServicosTorneio _servicos;
 
         public JogadoresController(IConfiguration configuration, IDbRepositorio<Jogador> dbRepositorioJogador,
-            IMeusServicos servicos)
+            IServicosTorneio servicos)
         {
             _configuration = configuration;
             _dbRepositorioJogador = dbRepositorioJogador;
@@ -42,12 +42,13 @@ namespace api_torneio_mv.Aplicacao.v1.Controllers
             }
             
             var time = _servicos.ObterTimeDoJogador(jogador);
+            
             if (time != null)
             {
-                var jogadorCompleto = new { Id = jogador.Id, Nome = jogador.Nome, 
+                var jogadorComTime = new { Id = jogador.Id, Nome = jogador.Nome, 
                                             IdTime = time.Id, NomeTime = time.Nome };
 
-                return jogadorCompleto;
+                return jogadorComTime;
             }
 
             return jogador;
