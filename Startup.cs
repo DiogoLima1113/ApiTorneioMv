@@ -31,6 +31,8 @@ namespace api_torneio_mv
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
+            services.AddCors();
+            
             ConnectionProvider connectionProvider = new ConnectionProvider(Configuration);
 
             Func<IServiceProvider, ConnectionProvider> spConnectionProvider = _ => connectionProvider;
@@ -55,7 +57,7 @@ namespace api_torneio_mv
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
+            app.UseCors(option => option.WithOrigins("http://localhost:3000"));
             app.UseHttpsRedirection();
             app.UseMvc();
         }
