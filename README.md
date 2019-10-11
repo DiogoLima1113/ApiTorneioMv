@@ -31,5 +31,5 @@ Necessária a criação de um banco de dados no SQLServer, segue query modelo:
 Após a criacao do mesmo deve-se atualizar a connectionString no arquivo appsettings.json
 
 Ao abrir o projeto deve realizar os comando:
-    npm i
+    dotnet restore
     dotnet run
