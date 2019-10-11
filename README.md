@@ -1,5 +1,5 @@
 # ApiTorneioMv
-Necessario instalar Node.js na versão mínima 6.4.1
+
 Necessario instalar Dot Net Core na versão mínima 2.2.402
 
 Necessária a criação de um banco de dados no SQLServer, segue query modelo:
