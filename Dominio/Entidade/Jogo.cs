@@ -1,4 +1,4 @@
-namespace api_torneio_mv.Dominio.Entidade
+namespace ApiTorneioMv.Dominio.Entidade
 {
     public class Jogo
     {

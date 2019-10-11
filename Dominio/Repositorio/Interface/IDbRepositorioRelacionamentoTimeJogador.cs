@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using api_torneio_mv.Dominio.Entidade;
+using ApiTorneioMv.Dominio.Entidade;
 
-namespace api_torneio_mv.Dominio.Repositorio.Interface
+namespace ApiTorneioMv.Dominio.Repositorio.Interface
 {
     public interface IDbRepositorioRelacionamentoTimeJogador
     {

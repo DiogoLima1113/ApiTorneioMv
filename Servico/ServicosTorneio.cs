@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using System.Linq;
-using api_torneio_mv.Dominio.Entidade;
-using api_torneio_mv.Dominio.Repositorio.Interface;
+using ApiTorneioMv.Dominio.Entidade;
+using ApiTorneioMv.Dominio.Repositorio.Interface;
 
-namespace api_torneio_mv.Servico
+namespace ApiTorneioMv.Servico
 {
     public class ServicosTorneio : IServicosTorneio
     {

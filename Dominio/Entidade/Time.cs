@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace api_torneio_mv.Dominio.Entidade
+namespace ApiTorneioMv.Dominio.Entidade
 {
     public class Time
     {

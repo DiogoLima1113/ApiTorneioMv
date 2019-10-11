@@ -1,11 +1,10 @@
 using System.Collections.Generic;
-using System.Data;
 using System.Linq;
-using api_torneio_mv.Dominio.Entidade;
-using api_torneio_mv.Dominio.Repositorio.Interface;
+using ApiTorneioMv.Dominio.Entidade;
+using ApiTorneioMv.Dominio.Repositorio.Interface;
 using Dapper;
 
-namespace api_torneio_mv.Dominio.Repositorio.Classe
+namespace ApiTorneioMv.Dominio.Repositorio.Classe
 {
     public class DbRepositorioJogo : IDbRepositorio<Jogo>
     {
@@ -29,10 +28,10 @@ namespace api_torneio_mv.Dominio.Repositorio.Classe
                                     pontuacaoTimeVisitante = @PontuacaoTimeVisitante
                                 WHERE id = @Id;",
                                 new { Id = obj.Id,
-                                    idTimeCasa = obj.IdTimeCasa,
-                                    idTimeVisitante = obj.IdTimeVisitante,
-                                    pontuacaoTimeCasa = obj.PontuacaoTimeCasa,
-                                    pontuacaoTimeVisitante = obj.PontuacaoTimeVisitante });
+                                    IdTimeCasa = obj.IdTimeCasa,
+                                    IdTimeVisitante = obj.IdTimeVisitante,
+                                    PontuacaoTimeCasa = obj.PontuacaoTimeCasa,
+                                    PontuacaoTimeVisitante = obj.PontuacaoTimeVisitante });
             }
         }
 
@@ -53,9 +52,9 @@ namespace api_torneio_mv.Dominio.Repositorio.Classe
                 connection.Query($@"INSERT INTO {NomeTabela} VALUES
                                 (@IdTimeCasa, @IdTimeVisitante, @PontuacaoTimeCasa,@PontuacaoTimeVisitante);",
                                 new { idTimeCasa = obj.IdTimeCasa,
-                                    idTimeVisitante = obj.IdTimeVisitante,
-                                    pontuacaoTimeCasa = obj.PontuacaoTimeCasa,
-                                    pontuacaoTimeVisitante = obj.PontuacaoTimeVisitante });
+                                    IdTimeVisitante = obj.IdTimeVisitante,
+                                    PontuacaoTimeCasa = obj.PontuacaoTimeCasa,
+                                    PontuacaoTimeVisitante = obj.PontuacaoTimeVisitante });
             }
         }
 

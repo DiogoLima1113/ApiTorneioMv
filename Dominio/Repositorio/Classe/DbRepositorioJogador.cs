@@ -1,10 +1,10 @@
 using System.Collections.Generic;
 using System.Linq;
-using api_torneio_mv.Dominio.Entidade;
-using api_torneio_mv.Dominio.Repositorio.Interface;
+using ApiTorneioMv.Dominio.Entidade;
+using ApiTorneioMv.Dominio.Repositorio.Interface;
 using Dapper;
 
-namespace api_torneio_mv.Dominio.Repositorio.Classe
+namespace ApiTorneioMv.Dominio.Repositorio.Classe
 {
     public class DbRepositorioJogador : IDbRepositorio<Jogador>
     {

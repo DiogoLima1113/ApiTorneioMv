@@ -1,13 +1,13 @@
 using System.Collections.Generic;
 using System.Linq;
-using api_torneio_mv.Dominio.Entidade;
-using api_torneio_mv.Dominio.Repositorio.Interface;
-using api_torneio_mv.Servico;
+using ApiTorneioMv.Dominio.Entidade;
+using ApiTorneioMv.Dominio.Repositorio.Interface;
+using ApiTorneioMv.Servico;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
-namespace api_torneio_mv.Aplicacao.v1.Controllers
+namespace ApiTorneioMv.Aplicacao.v1.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]

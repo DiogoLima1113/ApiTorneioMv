@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace api_torneio_mv.Dominio.Repositorio.Interface
+namespace ApiTorneioMv.Dominio.Repositorio.Interface
 {
     public interface IDbRepositorio<T> where T : new()
     {
